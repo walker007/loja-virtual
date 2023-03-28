@@ -9,7 +9,7 @@ function buscaItens() {
     {
       nome: "Smart TV Samsung",
       quantidade: 1,
-      imagem: "imgs/headphone.webp",
+      imagem: "imgs/laptop.webp",
       preco: 2750.98,
     },
   ];
@@ -48,14 +48,36 @@ function renderItem(item) {
   container.appendChild(divItem);
 }
 
+function calculaFrete(){
+  return 50.98;
+}
+
 function main() {
     const itens = buscaItens();
+    const frete = calculaFrete();
+
     const linkItens = document.querySelector("a[href='#items']");
+    const itensTotal = document.getElementById("itens-total");
+    const freteTotal = document.getElementById("frete-total");
+    const totalPedido = document.getElementById("pedido-total");
+
+    const formataDinheiro = new Intl.NumberFormat("pt-br",
+    {
+      style: "currency", 
+      currency: "BRL"
+    });
 
     const quantidadeItens = itens.reduce(function(valorAnterior, item){
         return valorAnterior + item.quantidade;
     },0);
 
+    const subTotalItens = itens.reduce(function(valorAnterior, item){
+      return valorAnterior + (item.quantidade * item.preco);
+    },0);
+
+    totalPedido.innerHTML = formataDinheiro.format(frete + subTotalItens);
+    freteTotal.innerHTML = formataDinheiro.format(frete);
+    itensTotal.innerHTML = formataDinheiro.format(subTotalItens);
     linkItens.innerHTML = `${quantidadeItens} ${(quantidadeItens === 1 ? "Item" : "Itens")}`;
 
     for(var item of itens){
